@@ -1,4 +1,6 @@
-<record id="inherit_custom_sale_order_inherit_module_name" model="ir.ui.view">
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <record id="inherit_custom_sale_order_inherit_module_name" model="ir.ui.view">
     <field name="name">sale.order.form.inherit</field>
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="inherit_module_name.inherit_view_id"/>
@@ -8,3 +10,4 @@
         </xpath>
     </field>
 </record>
+</odoo>
