@@ -5,7 +5,7 @@
     'version': '1.1.5',
     'license': "AGPL-3",
     'depends': [
-        'sale_management'
+        'sale'
     ],
     'data': [
         'views/sale_order_form.xml'
