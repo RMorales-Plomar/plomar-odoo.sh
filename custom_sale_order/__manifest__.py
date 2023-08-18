@@ -5,6 +5,7 @@
     'version': '1.1.5',
     'license': "AGPL-3",
     'depends': [
+        'base',
         'sale',
         'sale_management',
     ],
