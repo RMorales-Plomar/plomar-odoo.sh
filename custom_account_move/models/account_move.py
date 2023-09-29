@@ -55,6 +55,7 @@ class AccountMove(models.Model):
             "correo_copia": self.partner_id.email or self.company_id.fe_other_email,
             "xml_dte": signed_invoice
             }
+        print(payloads)
         response = requests.post(url=URL, json=payloads, headers=headers )
         data = response.json()
         if data['resultado']:
