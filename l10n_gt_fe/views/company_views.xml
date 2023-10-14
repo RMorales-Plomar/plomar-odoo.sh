@@ -8,7 +8,8 @@
             <field name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
-                    <page name="fe" string="Electronic Invoice" attrs="{'invisible': [('is_gt', '=', False)]}">
+<!--                     <page name="fe" string="Electronic Invoice" attrs="{'invisible': [('is_gt', '=', False)]}"> -->
+        <page name="fe" string="Electronic Invoice">
                         <group>
                             <field name="fe_user"/>
                             <field name="fe_sign_token"/>
