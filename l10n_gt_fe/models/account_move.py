@@ -441,8 +441,8 @@ class AccountMove(models.Model):
         })
         response = requests.post(url=URL, json=payloads, headers=headers)
         data = response.json()
-            _logger.info('*************DATA XML***************************')
-            _logger.info( data )
+        _logger.info('*************DATA XML***************************')
+        _logger.info( data )
         if not data['resultado']:
             _logger.info('*************DATA XML***************************')
             _logger.info( data['archivo'] )
