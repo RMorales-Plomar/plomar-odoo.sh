@@ -441,8 +441,13 @@ class AccountMove(models.Model):
         })
         response = requests.post(url=URL, json=payloads, headers=headers)
         data = response.json()
+            _logger.info('*************DATA XML***************************')
+            _logger.info( data )
         if not data['resultado']:
-            values.update( {'arch_xml': '', 'process_status': 'fail'})
+            _logger.info('*************DATA XML***************************')
+            _logger.info( data['archivo'] )
+            _logger.info('*************Estado*****************************')
+            _logger.info('fail')
         else:
             _logger.info('*************DATA XML***************************')
             _logger.info( data['archivo'] )
