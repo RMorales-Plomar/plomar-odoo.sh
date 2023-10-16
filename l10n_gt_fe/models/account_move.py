@@ -441,10 +441,13 @@ class AccountMove(models.Model):
         })
         response = requests.post(url=URL, json=payloads, headers=headers)
         data = response.json()
-        # if not data['resultado']:
-        #     values.update( {'arch_xml': '', 'process_status': 'fail'})
-        # else:
-        #     values.update( {'arch_xml': data['archivo'], 'process_status': 'process'})
+        if not data['resultado']:
+            values.update( {'arch_xml': '', 'process_status': 'fail'})
+        else:
+            _logger.info('*************DATA XML***************************')
+            _logger.info( data['archivo'] )
+            _logger.info('*************Estado*****************************')
+            _logger.info('process')
         return data['archivo']#self.write( values )
 
     def send_invoice(self):
