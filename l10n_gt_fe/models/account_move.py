@@ -431,7 +431,8 @@ class AccountMove(models.Model):
     def _sign_invoice(self, cancel=False, xml_cancel=False):
         headers = {'Content-Type': 'application/json'}
         URL = self.env['ir.config_parameter'].sudo().get_param('url.sign.webservice.fe')
-        print(URL)
+         _logger.info('*************URL***************************')
+         _logger.info(URL)
         payloads = self.company_id._get_sign_token()
         payloads.update({
             "codigo": str(self.journal_id.fe_establishment_id.fe_code) if self.journal_id.fe_establishment_id else "0",
