@@ -417,6 +417,9 @@ class AccountMove(models.Model):
                               "cex:CodigoExportador").text = self.journal_id.fe_establishment_id.export_code
         _logger.info('*********** Llegamos aqui *************')
         _logger.info(fe)
+        xml_string = ET.tostring(fe, encoding='UTF-8', method='xml')
+        _logger.info(str(xml_string.decode('utf-8')))
+
         # ******************* ALTERNATIVA? ***************
         #rough_string = ET.tostring(fe, encoding='UTF-8', method='xml')
         #reparsed = minidom.parseString(rough_string)
