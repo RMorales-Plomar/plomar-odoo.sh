@@ -422,7 +422,8 @@ class AccountMove(models.Model):
         # pretty_str = reparsed.toprettyxml(indent="  ", encoding="utf-8")
         # return pretty_str
         # ******************* ALTERNATIVA? ***************
-
+        _logger.info('*********** FE *************')
+        _logger.info(fe)
 
         final = ET.ElementTree(fe)
         final.write(f, encoding='UTF-8', xml_declaration=True)
