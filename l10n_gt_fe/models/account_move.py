@@ -415,15 +415,15 @@ class AccountMove(models.Model):
                               "cex:NombreExportador").text = self.journal_id.fe_establishment_id.fe_tradename
                 ET.SubElement(Exportacion,
                               "cex:CodigoExportador").text = self.journal_id.fe_establishment_id.export_code
-
+        
         # ******************* ALTERNATIVA? ***************
         rough_string = ET.tostring(fe, encoding='UTF-8', method='xml')
-        reparsed = minidom.parseString(rough_string)
-        pretty_str = reparsed.toprettyxml(indent="  ", encoding="utf-8")
+        #reparsed = minidom.parseString(rough_string)
+        #pretty_str = reparsed.toprettyxml(indent="  ", encoding="utf-8")
         # return pretty_str
         # ******************* ALTERNATIVA? ***************
         _logger.info('*********** FE pretty *************')
-        _logger.info(pretty_str)
+        _logger.info(rough_string)
 
         final = ET.ElementTree(fe)
         final.write(f, encoding='UTF-8', xml_declaration=True)
@@ -457,12 +457,15 @@ class AccountMove(models.Model):
         return data['archivo']#self.write( values )
 
     def send_invoice(self):
+        _logger.info('*************Inizialization Send invoice ***************************')
+        _logger.info(self._xml())
         if self.journal_id and not self.journal_id.active_fel:
             return
         URL = self.env['ir.config_parameter'].sudo().get_param('url.webservice.fe')
         xml = self._xml()
+        
         _logger.info('*************Infile-XML***************************')
-        _logger.info(xml)
+        #_logger.info(xml)
         self.write({ 'arch_xml': base64.b64encode( xml ),
                     'sent_arch_xml': xml,
                     'process_status': 'process',
