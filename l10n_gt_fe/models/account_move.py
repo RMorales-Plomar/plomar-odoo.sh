@@ -417,13 +417,13 @@ class AccountMove(models.Model):
                               "cex:CodigoExportador").text = self.journal_id.fe_establishment_id.export_code
 
         # ******************* ALTERNATIVA? ***************
-        # rough_string = ET.tostring(fe, encoding='UTF-8', method='xml')
-        # reparsed = minidom.parseString(rough_string)
-        # pretty_str = reparsed.toprettyxml(indent="  ", encoding="utf-8")
+        rough_string = ET.tostring(fe, encoding='UTF-8', method='xml')
+        reparsed = minidom.parseString(rough_string)
+        pretty_str = reparsed.toprettyxml(indent="  ", encoding="utf-8")
         # return pretty_str
         # ******************* ALTERNATIVA? ***************
-        _logger.info('*********** FE *************')
-        _logger.info(fe)
+        _logger.info('*********** FE pretty *************')
+        _logger.info(pretty_str)
 
         final = ET.ElementTree(fe)
         final.write(f, encoding='UTF-8', xml_declaration=True)
