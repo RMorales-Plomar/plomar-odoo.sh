@@ -43,18 +43,18 @@ class AccountMove(models.Model):
         return values
 
 
-    arch_xml = fields.Text(string="XML Architecture", help='XML Architecture', copy=False, readonly=True)
-    sent_arch_xml = fields.Text(string="XML Architecture Sent", help='XML Architecture ', copy=False, readonly=True)
+    arch_xml = fields.Text(string="XML Architecture", help='XML Architecture', copy=True, readonly=False)
+    sent_arch_xml = fields.Text(string="XML Architecture Sent", help='XML Architecture ', copy=True, readonly=False)
     partner_vat = fields.Char('VAT', compute="get_partner_vat", store=True)
-    process_status = fields.Selection([('ok', 'success'), ('fail', 'Failed'), ('process', 'Process'), ('cancel', 'Cancel')], copy=False)
-    fe_type = fields.Selection(TYPE_FE, string='Tipo', related="journal_id.fe_type", readonly=True)
+    process_status = fields.Selection([('ok', 'success'), ('fail', 'Failed'), ('process', 'Process'), ('cancel', 'Cancel')], copy=True)
+    fe_type = fields.Selection(TYPE_FE, string='Tipo', related="journal_id.fe_type", readonly=False)
     fe_phrase_ids = fields.Many2many('account.fe.phrase', string='Frases', default=lambda s: s.env.company.fe_phrase_ids)
     #fe_customer_reference = fields.Char(string='Customer Reference')
     fe_exhangerate = fields.Char(string='Tasa de Cambio', size=6, default=1.00)
-    fe_uuid = fields.Char(string='UUID', readonly=False, copy=False)
-    fe_serie = fields.Char(string='Serie', readonly=False, copy=False)
-    fe_number = fields.Char(string='Number', readonly=False, copy=False)
-    fe_certification_date = fields.Datetime(string="Certification Date", readonly=False, copy=False)
+    fe_uuid = fields.Char(string='UUID', readonly=False, copy=True)
+    fe_serie = fields.Char(string='Serie', readonly=False, copy=True)
+    fe_number = fields.Char(string='Number', readonly=False, copy=True)
+    fe_certification_date = fields.Datetime(string="Certification Date", readonly=False, copy=True)
     complement_ids = fields.One2many('account.move.complement', 'move_id', string='Complements' )
     third_party_account_ids = fields.One2many('charge.third.party.account', 'move_id', string='Third Party Accounts')
     fe_count_payment = fields.Integer(string='No. Pagos', default=1)
@@ -62,8 +62,8 @@ class AccountMove(models.Model):
     fe_payment_line_ids = fields.One2many('account.move.payment', 'move_id', string='Payment Lines')
     fe_errors = fields.Text('Errors', readonly=False)
 
-    fe_xml_file = fields.Binary(string='Download XML', copy=False)
-    fe_pdf_file = fields.Binary(string='Download PDF', copy=False)
+    fe_xml_file = fields.Binary(string='Download XML', copy=True)
+    fe_pdf_file = fields.Binary(string='Download PDF', copy=True)
 
     rel_establishment_user = fields.Many2one('res.company.establishment', string='Establecimiento Usuario', related="invoice_user_id.fe_establishment_id")
     
@@ -574,8 +574,8 @@ class AccountMove(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    price_tax = fields.Monetary(string='Subtotal', compute="_compute_totals", store=False, readonly=True)
-    price_discount = fields.Monetary(string='Price Discount', compute="_compute_totals", store=False, readonly=True)
+    price_tax = fields.Monetary(string='Subtotal', compute="_compute_totals", store=False, readonly=False)
+    price_discount = fields.Monetary(string='Price Discount', compute="_compute_totals", store=False, readonly=False)
     #guide = fields.Char(string='Guide', size=12)
 
     @api.model
