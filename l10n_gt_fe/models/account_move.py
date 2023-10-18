@@ -548,6 +548,8 @@ class AccountMove(models.Model):
             }
         response = requests.post(url=URL, json=payloads, headers=headers )
         data =  response.json() 
+        _logger.info("Respuesta de cancelación")
+        _logger.info(data)
 
         if data['resultado']:
             xml = base64.b64decode( data['xml_certificado'] )
