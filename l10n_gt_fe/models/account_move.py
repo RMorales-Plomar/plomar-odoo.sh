@@ -548,7 +548,7 @@ class AccountMove(models.Model):
             }
         response = requests.post(url=URL, json=payloads, headers=headers )
         _logger.info("Respuesta de cancelación")
-        _logger.info(reponse)
+        _logger.info(response)
         data =  response.json() 
      
 
