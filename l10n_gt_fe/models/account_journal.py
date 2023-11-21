@@ -22,5 +22,5 @@ class AccountJournal(models.Model):
 
     active_fel = fields.Boolean('Active FEL', default=False)
     special_fel = fields.Boolean('Special FEL', default=False)
-    fe_type = fields.Selection(TYPE_FE, string='Type' tracking=True)
+    fe_type = fields.Selection(TYPE_FE, string='Type', tracking=True)
     fe_establishment_id = fields.Many2one('res.company.establishment', string='Establishment')
