@@ -67,7 +67,73 @@ class AccountMove(models.Model):
 
     rel_establishment_user = fields.Many2one('res.company.establishment', string='Establecimiento Usuario', related="invoice_user_id.fe_establishment_id")
     
- 
+    def verificar_parametros_xml(self):
+        errores = []
+        iva_permitido = ['IVA', 'PETROLEO', 'TURISMO HOSPEDAJE', 'TURISMO PASAJES', 'TIMBRE DE PRENSA', 
+                        'BOMBEROS', 'TASA MUNICIPAL', 'BEBIDAS ALCOHOLICAS', 'TABACO', 'CEMENTO', 
+                        'BEBIDAS NO ALCOHOLICAS', 'TARIFA PORTUARIA']
+
+        # Verificaciones comunes para todos los tipos de documentos
+        if not self.invoice_date:
+            errores.append('La fecha de la factura es obligatoria.')
+        if not self.currency_id:
+            errores.append('La moneda es un campo obligatorio.')
+
+        impuestos_no_permitidos = set()
+        for invoice_line_id in self.invoice_line_ids:
+            for tax in invoice_line_id.tax_ids:
+                if tax.name not in iva_permitido:
+                    impuestos_no_permitidos.add(tax.name)
+
+        if impuestos_no_permitidos:
+            errores.append('Los impuestos permitidos en el documento son: %s\n' % ', '.join(iva_permitido))
+            errores.append('Los impuestos no permitidos son: %s' % ', '.join(impuestos_no_permitidos).join('.\n')
+
+        # Verificaciones del emisor
+        if not self.company_id:
+            errores.append('La información de la empresa emisora es obligatoria.')
+        if not self.company_id.vat:
+            errores.append('El NIT del emisor es obligatorio.')
+        if not self.company_id.email:
+            errores.append('El correo electrónico del emisor es obligatorio.')
+
+        # Verificaciones del receptor
+        if not self.partner_id:
+            errores.append('La información del cliente receptor es obligatoria.')
+        if not self.partner_id.vat:
+            errores.append('El NIT del receptor es obligatorio.')
+        if not self.partner_id.email:
+            errores.append('El correo electrónico del receptor es obligatorio.')
+            
+        if not self.partner_id.city:
+            errores.append('La ciudad del receptor es obligatorio.')
+        # Verificación de líneas de factura
+        if not self.invoice_line_ids:
+            errores.append('La factura debe tener al menos una línea de producto o servicio.')
+
+        # Verificaciones específicas por tipo de documento
+        if self.fe_type == 'FCAM' and not self.fe_payment_line_ids:
+            errores.append('Para una Factura Cambiaria, se requieren líneas de pago.')
+
+        elif self.fe_type == 'NABN':
+            if not self.reversed_entry_id:
+                errores.append('Para una Nota de Abono, se requiere una referencia de factura.')
+            if not self.reversed_entry_id.invoice_payment_term_id:
+                errores.append('Se requiere término de pago para la factura de referencia en una Nota de Abono.')
+
+        elif self.fe_type in ['FAEX', 'FESP', 'NCRE', 'NDEB']:
+            if self.fe_type == 'FAEX' and not self.journal_id.fe_establishment_id:
+                errores.append('Para una Factura de Exportación, se requieren detalles del exportador.')
+            if self.fe_type in ['NCRE', 'NDEB'] and not self.reversed_entry_id:
+                errores.append('Para una Nota de Crédito o Débito, se requiere una referencia de factura original.')
+
+        # Si hay errores, lanzar una excepción con todos los mensajes
+        if errores:
+            mensaje_error = "Se encontraron los siguientes errores:\n" + "\n".join(errores)
+            raise UserError(mensaje_error)
+
+        # Si todas las verificaciones pasan
+        return True
     
     @api.depends('partner_id')
     def get_partner_vat(self):
@@ -120,6 +186,7 @@ class AccountMove(models.Model):
             self.update({'fe_payment_line_ids': lines})
 
     def _xml(self):
+        self.verificar_parametros_xml()
         origin_faex = False
         f = BytesIO()
         invd = self.invoice_date or date.today()
