@@ -87,7 +87,7 @@ class AccountMove(models.Model):
 
         if impuestos_no_permitidos:
             errores.append('Los impuestos permitidos en el documento son: %s\n' % ', '.join(iva_permitido))
-            errores.append('Los impuestos no permitidos son: %s' % ', '.join(impuestos_no_permitidos).join('.\n')
+            errores.append('Los impuestos no permitidos son: %s' % ', '.join(impuestos_no_permitidos).join('.\n'))
 
         # Verificaciones del emisor
         if not self.company_id:
