@@ -511,7 +511,7 @@ class AccountMove(models.Model):
             "es_anulacion": "S" if cancel else "N"
         })
         response = requests.post(url=URL, json=payloads, headers=headers)
-        _logger.info( resonse.text )
+        _logger.info( response.text )
         data = response.json()
         _logger.info('*************DATA XML***************************')
         _logger.info( data )
@@ -555,7 +555,7 @@ class AccountMove(models.Model):
             "xml_dte": signed_invoice
             }
         response = requests.datapost(url=URL, json=payloads, headers=headers )
-        _logger.info( resonse.text )
+        _logger.info( response.text )
         data = response.json()
         if data['resultado']:
             certification_date = parse( data['fecha'] )
